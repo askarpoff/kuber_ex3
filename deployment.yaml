@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: dep1
+  name: dep1
+  namespace: ex3
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: dep1
+  template:
+    metadata:
+      labels:
+        app: dep1
+    spec:
+      containers:
+        - image: nginx:latest
+          ports:
+            - containerPort: 80
+              name: httpnginx
+              protocol: TCP
+          name: nginx
+          imagePullPolicy: IfNotPresent
+        - image: wbitt/network-multitool
+          name: multitool
+          env:
+            - name: HTTP_PORT
+              value: '8080'
+            - name: HTTPS_PORT
+              value: '8443'
+          imagePullPolicy: IfNotPresent
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dep1-svc
+spec:
+  ports:
+    - name: nginx-http
+      port: 80
+    - name: multitool-http
+      port: 8080
+    - name: multitool-https
+      port: 8443
+  selector:
+    app: dep1
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: multitool
+  labels:
+    app: multitool
+
+spec:
+  containers:
+  - name: multitool
+    image: wbitt/network-multitool
+    env:
+      - name: HTTP_PORT
+        value: "1080"
+      - name: HTTPS_PORT
+        value: "10443"
