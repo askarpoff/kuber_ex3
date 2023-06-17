@@ -154,6 +154,19 @@ spec:
       - name: HTTPS_PORT
         value: "10443"
 ```
+```bash
+root@learning-k8s:~/kuber_ex3# kubectl get deployments,svc,pods -o wide
+NAME                   READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS        IMAGES                                 SELECTOR
+deployment.apps/dep1   2/2     2            2           58m   nginx,multitool   nginx:latest,wbitt/network-multitool   app=dep1
+
+NAME               TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                    AGE   SELECTOR
+service/dep1-svc   ClusterIP   10.152.183.218   <none>        80/TCP,8080/TCP,8443/TCP   22m   app=dep1
+
+NAME                        READY   STATUS    RESTARTS   AGE     IP            NODE           NOMINATED NODE   READINESS GATES
+pod/multitool               1/1     Running   0          9m15s   10.1.161.65   learning-k8s   <none>           <none>
+pod/dep1-65b9fb4555-8t28r   2/2     Running   0          7m54s   10.1.161.68   learning-k8s   <none>           <none>
+pod/dep1-65b9fb4555-s5glp   2/2     Running   0          7m53s   10.1.161.71   learning-k8s   <none>           <none>
+```
 ------
 
 ### Задание 2. Создать Deployment и обеспечить старт основного контейнера при выполнении условий
