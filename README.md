@@ -82,6 +82,8 @@ spec:
 ```
 ![image](https://github.com/askarpoff/kuber_ex3/assets/108946489/afe8f515-aa2a-4784-86ee-5ce669775347)
 
+![image](https://github.com/askarpoff/kuber_ex3/assets/108946489/6893bcfd-ec6d-4206-a892-fb4b8049455e)
+
 6. Создать отдельный Pod с приложением multitool и убедиться с помощью `curl`, что из пода есть доступ до приложений из п.1.
 
 ------
