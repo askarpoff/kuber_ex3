@@ -268,3 +268,4 @@ pod/dep2-5846fb8695-dk5nm   1/1     Running   0          53s   10.1.161.69   lea
 ```
 5. Продемонстрировать состояние пода до и после запуска сервиса.
 
+![image](https://github.com/askarpoff/kuber_ex3/assets/108946489/c5cd633b-92fd-45ad-b53a-6c42df24d418)
