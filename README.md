@@ -202,7 +202,68 @@ WBITT Network MultiTool (with NGINX) - dep1-65b9fb4555-s5glp - 10.1.161.71 - HTT
 ### Задание 2. Создать Deployment и обеспечить старт основного контейнера при выполнении условий
 
 1. Создать Deployment приложения nginx и обеспечить старт контейнера только после того, как будет запущен сервис этого приложения.
-2. Убедиться, что nginx не стартует. В качестве Init-контейнера взять busybox.
-3. Создать и запустить Service. Убедиться, что Init запустился.
-4. Продемонстрировать состояние пода до и после запуска сервиса.
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dep2
+  labels:
+    app: dep2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dep2
+  template:
+    metadata:
+      labels:
+        app: dep2
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+         - containerPort: 80
+      initContainers:
+      - name: busybox-check
+        image: busybox
+        command: ['sh', '-c', "until nslookup nginx-svc.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for myservice; sleep 5; done"]
+```
+3. Убедиться, что nginx не стартует. В качестве Init-контейнера взять busybox.
+```bash
+root@learning-k8s:~/kuber_ex3# kubectl apply -f dep-nginx.yaml
+deployment.apps/dep2 created
+root@learning-k8s:~/kuber_ex3# kubectl get deployments,svc,pods -o wide
+NAME                   READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES         SELECTOR
+deployment.apps/dep2   0/1     1            0           9s    nginx        nginx:latest   app=dep2
+
+NAME                        READY   STATUS     RESTARTS   AGE   IP            NODE           NOMINATED NODE   READINESS GATES
+pod/dep2-5846fb8695-dk5nm   0/1     Init:0/1   0          9s    10.1.161.69   learning-k8s   <none>           <none>
+```
+4. Создать и запустить Service. Убедиться, что Init запустился.
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-svc
+spec:
+  ports:
+    - name: web
+      port: 80
+  selector:
+    app: dep2
+```
+root@learning-k8s:~/kuber_ex3# kubectl apply -f nginx-svc.yaml
+service/nginx-svc created
+root@learning-k8s:~/kuber_ex3# kubectl get deployments,svc,pods -o wide
+NAME                   READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES         SELECTOR
+deployment.apps/dep2   1/1     1            1           53s   nginx        nginx:latest   app=dep2
+
+NAME                TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE   SELECTOR
+service/nginx-svc   ClusterIP   10.152.183.187   <none>        80/TCP    4s    app=dep2
+
+NAME                        READY   STATUS    RESTARTS   AGE   IP            NODE           NOMINATED NODE   READINESS GATES
+pod/dep2-5846fb8695-dk5nm   1/1     Running   0          53s   10.1.161.69   learning-k8s   <none>           <none>
+
+5. Продемонстрировать состояние пода до и после запуска сервиса.
 
