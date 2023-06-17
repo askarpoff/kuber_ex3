@@ -24,6 +24,7 @@
 
 1. Создать Deployment приложения, состоящего из двух контейнеров — nginx и multitool. Решить возникшую ошибку.
 
+Указал другие порты у network-multitool
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
