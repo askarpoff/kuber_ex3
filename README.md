@@ -68,6 +68,19 @@ spec:
 ![image](https://github.com/askarpoff/kuber_ex3/assets/108946489/2ffb9224-e1e2-47c4-bb1f-31b216fe417f)
  
 4. Создать Service, который обеспечит доступ до реплик приложений из п.1.
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-svc
+spec:
+  ports:
+    - name: web
+      port: 80
+  selector:
+    app: dep1
+```
+![image](https://github.com/askarpoff/kuber_ex3/assets/108946489/afe8f515-aa2a-4784-86ee-5ce669775347)
 
 6. Создать отдельный Pod с приложением multitool и убедиться с помощью `curl`, что из пода есть доступ до приложений из п.1.
 
