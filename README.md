@@ -72,17 +72,69 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: nginx-svc
+  name: dep1-svc
 spec:
   ports:
-    - name: web
+    - name: nginx-http
       port: 80
+    - name: multitool-http
+      port: 8080
+    - name: multitool-https
+      port: 8443
   selector:
     app: dep1
 ```
-![image](https://github.com/askarpoff/kuber_ex3/assets/108946489/afe8f515-aa2a-4784-86ee-5ce669775347)
+Проверка доступности через сервис:
+```bash
+root@learning-k8s:~/kuber_ex3# kubectl port-forward service/dep1-svc 80:8080 --address='0.0.0.0' &
+[1] 107088
+root@learning-k8s:~/kuber_ex3# Forwarding from 0.0.0.0:80 -> 8080
 
-![image](https://github.com/askarpoff/kuber_ex3/assets/108946489/6893bcfd-ec6d-4206-a892-fb4b8049455e)
+root@learning-k8s:~/kuber_ex3# curl http://10.1.1.32
+Handling connection for 80
+WBITT Network MultiTool (with NGINX) - dep1-65b9fb4555-8t28r - 10.1.161.68 - HTTP: 8080 , HTTPS: 8443 . (Formerly praqma/network-multitool)
+root@learning-k8s:~/kuber_ex3# killall kubectl
+root@learning-k8s:~/kuber_ex3# kubectl port-forward service/dep1-svc 80:80 --address='0.0.0.0' &
+[2] 108004
+[1]   Terminated              kubectl port-forward service/dep1-svc 80:8080 --address='0.0.0.0'
+root@learning-k8s:~/kuber_ex3# Forwarding from 0.0.0.0:80 -> 80
+
+root@learning-k8s:~/kuber_ex3# curl http://10.1.1.32
+Handling connection for 80
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+html { color-scheme: light dark; }
+body { width: 35em; margin: 0 auto;
+font-family: Tahoma, Verdana, Arial, sans-serif; }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+root@learning-k8s:~/kuber_ex3# killall kubectl
+root@learning-k8s:~/kuber_ex3# kubectl port-forward service/dep1-svc 443:8443 --address='0.0.0.0' &
+[3] 108440
+[2]   Terminated              kubectl port-forward service/dep1-svc 80:80 --address='0.0.0.0'
+root@learning-k8s:~/kuber_ex3# Forwarding from 0.0.0.0:443 -> 8443
+kubectl port-forward service/decurl http://10.1.1.32^C
+root@learning-k8s:~/kuber_ex3# curl https://10.1.1.32 -k
+Handling connection for 443
+WBITT Network MultiTool (with NGINX) - dep1-65b9fb4555-8t28r - 10.1.161.68 - HTTP: 8080 , HTTPS: 8443 . (Formerly praqma/network-multitool)
+root@learning-k8s:~/kuber_ex3# killall kubectl
+```
 
 6. Создать отдельный Pod с приложением multitool и убедиться с помощью `curl`, что из пода есть доступ до приложений из п.1.
 
