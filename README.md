@@ -137,7 +137,23 @@ root@learning-k8s:~/kuber_ex3# killall kubectl
 ```
 
 6. Создать отдельный Pod с приложением multitool и убедиться с помощью `curl`, что из пода есть доступ до приложений из п.1.
-
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: multitool
+  labels:
+    app: multitool
+spec:
+  containers:
+  - name: multitool
+    image: wbitt/network-multitool
+    env:
+      - name: HTTP_PORT
+        value: "1080"
+      - name: HTTPS_PORT
+        value: "10443"
+```
 ------
 
 ### Задание 2. Создать Deployment и обеспечить старт основного контейнера при выполнении условий
