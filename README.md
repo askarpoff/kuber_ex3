@@ -253,6 +253,7 @@ spec:
   selector:
     app: dep2
 ```
+```bash
 root@learning-k8s:~/kuber_ex3# kubectl apply -f nginx-svc.yaml
 service/nginx-svc created
 root@learning-k8s:~/kuber_ex3# kubectl get deployments,svc,pods -o wide
@@ -264,6 +265,6 @@ service/nginx-svc   ClusterIP   10.152.183.187   <none>        80/TCP    4s    a
 
 NAME                        READY   STATUS    RESTARTS   AGE   IP            NODE           NOMINATED NODE   READINESS GATES
 pod/dep2-5846fb8695-dk5nm   1/1     Running   0          53s   10.1.161.69   learning-k8s   <none>           <none>
-
+```
 5. Продемонстрировать состояние пода до и после запуска сервиса.
 
