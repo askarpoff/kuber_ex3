@@ -166,6 +166,36 @@ NAME                        READY   STATUS    RESTARTS   AGE     IP            N
 pod/multitool               1/1     Running   0          9m15s   10.1.161.65   learning-k8s   <none>           <none>
 pod/dep1-65b9fb4555-8t28r   2/2     Running   0          7m54s   10.1.161.68   learning-k8s   <none>           <none>
 pod/dep1-65b9fb4555-s5glp   2/2     Running   0          7m53s   10.1.161.71   learning-k8s   <none>           <none>
+
+root@learning-k8s:~/kuber_ex3# kubectl exec --stdin --tty multitool -- /bin/bash
+bash-5.1# curl dep1-svc.ex3.svc.cluster.local:80
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+html { color-scheme: light dark; }
+body { width: 35em; margin: 0 auto;
+font-family: Tahoma, Verdana, Arial, sans-serif; }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+bash-5.1# curl dep1-svc.ex3.svc.cluster.local:8080
+WBITT Network MultiTool (with NGINX) - dep1-65b9fb4555-8t28r - 10.1.161.68 - HTTP: 8080 , HTTPS: 8443 . (Formerly praqma/network-multitool)
+bash-5.1# curl https://dep1-svc.ex3.svc.cluster.local:8443 -k
+WBITT Network MultiTool (with NGINX) - dep1-65b9fb4555-s5glp - 10.1.161.71 - HTTP: 8080 , HTTPS: 8443 . (Formerly praqma/network-multitool)
 ```
 ------
 
